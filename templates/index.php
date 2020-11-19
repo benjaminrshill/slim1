@@ -13,7 +13,7 @@
             font-size: 20px;
             text-align: center;
             color: #aaa;
-            background: #111;
+            background: #222;
         }
         a {
             color: #4a79ff;
@@ -28,11 +28,14 @@
             letter-spacing: -3px;
         }
         main {
-            width: 300px;
+            width: 400px;
             margin: 50px auto;
         }
         section {
-            margin: 100px auto;
+            margin: 20px auto;
+            padding: 5px 20px;
+            background: #111;
+            border-radius: 30px;
         }
         section div {
             text-align: left;
@@ -48,7 +51,7 @@
             margin: 5px;
         }
         input[type="text"] {
-            width: 200px;
+            width: 80%;
             height: 20px;
             margin: auto;
         }
@@ -63,34 +66,54 @@
         input[type="submit"]:active {
             transform: scale(0.9);
         }
+        .uncheckMe {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-
+<?php $done = $data[0]['completed'] ? 1 : 0 ?>
     <header>
-        <h1>TODO</h1>
+        <h1>todo</h1>
     </header>
 
     <main>
         <section>
-            <h2>My list / <a href="/done">Done</a></h2>
+            <h2>
+                <?php echo $done
+                    ? '<a href="/">To do</a> / Done'
+                    : 'To do / <a href="/done">Done</a>'
+                ?>
+                </h2>
             <form method="post">
                 <div>
+                    <h6 class="uncheckMe">
+                        Check items &amp; click submit to
+                        <?php
+                        echo $done
+                            ? 'move back to todo list'
+                            : 'remove from list';
+                        ?>
+                    </h6>
                     <?php
                     foreach ($data as $one) {
                         echo '<input type="checkbox" id="item'
-                            . $one['id']
-                            . '" name="'
-                            . $one['id']
-                            . '"><label for="item'
-                            . $one['id']
-                            . '">'
-                            . $one['name']
-                            . '</label><br/>';
+                        . $one['id']
+                        . '" name="'
+                        . $one['id']
+                        . '" value="'
+                        . ($one['completed'] ? 1 : 0)
+                        . '"><label for="item'
+                        . $one['id']
+                        . '">'
+                        . ($done ? '<s>' : '')
+                        . $one['name']
+                        . ($done ? '</s>' : '')
+                        . '</label><br/>';
                     }
                     ?>
                 </div>
-                <input type="submit" value="DONE!" />
+                <input type="submit" value="<?php echo $done ? 'REDO' : 'DONE' ?>!" />
             </form>
         </section>
         <section>

@@ -25,11 +25,12 @@ class OneModel
     public function checkOne($updateData)
     {
         foreach ($updateData as $key => $id) {
-            $query = $this->db->prepare('UPDATE one SET completed = 1 WHERE id = :id;');
+            $completed = $key['1'] ? 0 : 1;
+            $query = $this->db->prepare('UPDATE one SET completed = :completed WHERE id = :id;');
             $query->bindParam(':id', $key);
+            $query->bindParam(':completed', $completed);
             $query->execute();
         }
-        return $message = 'Successfully checked!';
     }
 
     public function addOne($addData)
@@ -40,6 +41,5 @@ class OneModel
         $query->bindParam(':name', $item);
         $query->bindParam(':off', $completed);
         $query->execute();
-        return $message = 'Successfully added!';
     }
 }

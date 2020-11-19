@@ -17,6 +17,8 @@ return function (App $app) {
 
     $app->get('/done', 'OneDoneController');
 
+    $app->post('/done', 'OneCheckController');
+
     // /books           send to /book
     // /books/{book}    send to book placeholder
     // /books[/{book]   inside [] is optional
