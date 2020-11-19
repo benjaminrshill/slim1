@@ -1,3 +1,11 @@
+<?php
+    if (isset($data[0]['completed'])) {
+        $done = $data[0]['completed'] ? 1 : 0;
+    } else {
+        $done = [];
+    }
+    ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,6 +53,9 @@
             flex-direction: column;
             justify-content: center;
         }
+        .buttons {
+            display: flex;
+        }
         input[type="checkbox"] {
             width: 20px;
             height: 20px;
@@ -53,7 +64,12 @@
         input[type="text"] {
             width: 80%;
             height: 20px;
-            margin: auto;
+            margin: 5px auto;
+        }
+        input[type="date"] {
+            width: 50%;
+            height: 25px;
+            margin: 5px auto;
         }
         input[type="submit"] {
             width: 120px;
@@ -66,13 +82,18 @@
         input[type="submit"]:active {
             transform: scale(0.9);
         }
+        input[type="submit"].danger {
+            background: #ac1f1f;
+        }
         .uncheckMe {
             text-align: center;
+        }
+        .wide {
+            min-width: 200px;
         }
     </style>
 </head>
 <body>
-<?php $done = $data[0]['completed'] ? 1 : 0 ?>
     <header>
         <h1>todo</h1>
     </header>
@@ -81,7 +102,7 @@
         <section>
             <h2>
                 <?php echo $done
-                    ? '<a href="/">To do</a> / Done'
+                    ? 'Done / <a href="/">To do</a>'
                     : 'To do / <a href="/done">Done</a>'
                 ?>
                 </h2>
@@ -95,34 +116,46 @@
                             : 'remove from list';
                         ?>
                     </h6>
-                    <?php
-                    foreach ($data as $one) {
-                        echo '<input type="checkbox" id="item'
-                        . $one['id']
-                        . '" name="'
-                        . $one['id']
-                        . '" value="'
-                        . ($one['completed'] ? 1 : 0)
-                        . '"><label for="item'
-                        . $one['id']
-                        . '">'
-                        . ($done ? '<s>' : '')
-                        . $one['name']
-                        . ($done ? '</s>' : '')
-                        . '</label><br/>';
-                    }
-                    ?>
+                    <table><thead><tr><td></td><td class="wide">ITEM</td><td><a href="/due">DUE</a></td></tr></thead>
+                        <tbody>
+                        <?php
+                        foreach ($data as $one) {
+                            echo '<tr><td><input type="checkbox" id="item'
+                            . $one['id']
+                            . '" name="'
+                            . $one['id']
+                            . '" value="'
+                            . ($one['completed'] ? 1 : 0)
+                            . '"></td><td><label for="item'
+                            . $one['id']
+                            . '">'
+                            . ($done ? '<s>' : '')
+                            . $one['name']
+                            . ($done ? '</s>' : '')
+                            . '</label></td><td>'
+                            . $one['due']
+                            . '</td></tr>';
+                        }
+                        ?>
+                        </tbody>
+                    </table>
                 </div>
-                <input type="submit" value="<?php echo $done ? 'REDO' : 'DONE' ?>!" />
+                <div class="buttons">
+                    <input type="submit" name="redoDone" value="<?php echo $done ? 'REDO' : 'DONE' ?>!" />
+                    <?php echo $done ? '<input type="submit" name="delete" value="DELETE!" class="danger" />' : '' ?>
+                </div>
             </form>
         </section>
-        <section>
+        <?php echo $done ? '' :
+        '<section>
             <h3>Add an item</h3>
             <form method="post" action="/add">
                 <input type="text" id="listItem" name="name" required="required" />
+                <input type="date" id="dueDate" name="due" />
                 <input type="submit" value="ADD!" />
             </form>
-        </section>
+        </section>'
+        ?>
     </main>
 
 </body>

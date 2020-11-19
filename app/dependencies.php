@@ -43,6 +43,8 @@ return function (ContainerBuilder $containerBuilder) {
     $container['OneCheckController'] = DI\Factory('\App\Factories\OneCheckControllerFactory');
     $container['OneAddController'] = DI\Factory('\App\Factories\OneAddControllerFactory');
     $container['OneDoneController'] = DI\Factory('\App\Factories\OneDoneControllerFactory');
+    $container['OneUncheckController'] = DI\Factory('\App\Factories\OneUncheckControllerFactory');
+    $container['OneSortController'] = DI\Factory('\App\Factories\OneSortControllerFactory');
 
     $containerBuilder->addDefinitions($container);
 };
